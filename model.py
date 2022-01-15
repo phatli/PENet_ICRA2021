@@ -70,6 +70,12 @@ class ENet(nn.Module):
         rgb = input['rgb']
         d = input['d']
 
+        # randomly mask some point depth
+        # import numpy as np
+        # mask = torch.from_numpy(np.random.choice([0,1],size=tuple(d.shape[-2:]),p = [9/10,1/10])).cuda()
+        # d = d * mask
+
+
         position = input['position']
         K = input['K']
         unorm = position[:, 0:1, :, :]
@@ -119,8 +125,8 @@ class ENet(nn.Module):
         geo_s6 = None
 
         if self.args.convolutional_layer_encoding == "xyz":
-            geo_s1 = self.geofeature(d, vnorm, unorm, 352, 1216, c352, c1216, f352, f1216)
-            geo_s2 = self.geofeature(d_s2, vnorm_s2, unorm_s2, 352 / 2, 1216 / 2, c352, c1216, f352, f1216)
+            geo_s1 = self.geofeature(d, vnorm, unorm, 352, 1216, c352, c1216, f352, f1216)# 1,3,352,1216
+            geo_s2 = self.geofeature(d_s2, vnorm_s2, unorm_s2, 352 / 2, 1216 / 2, c352, c1216, f352, f1216)# 1,3,176,608
             geo_s3 = self.geofeature(d_s3, vnorm_s3, unorm_s3, 352 / 4, 1216 / 4, c352, c1216, f352, f1216)
             geo_s4 = self.geofeature(d_s4, vnorm_s4, unorm_s4, 352 / 8, 1216 / 8, c352, c1216, f352, f1216)
             geo_s5 = self.geofeature(d_s5, vnorm_s5, unorm_s5, 352 / 16, 1216 / 16, c352, c1216, f352, f1216)
@@ -448,7 +454,6 @@ class PENet_C2(nn.Module):
 
         d = input['d']
         valid_mask = torch.where(d>0, torch.full_like(d, 1.0), torch.full_like(d, 0.0))
-
         feature_s1, feature_s2, coarse_depth = self.backbone(input)
         depth = coarse_depth
 

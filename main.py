@@ -20,6 +20,8 @@ from model import PENet_C2_train
 from model import PENet_C1
 from model import PENet_C2
 from model import PENet_C4
+from os.path import expanduser
+HOME_DIR = expanduser("~")
 
 parser = argparse.ArgumentParser(description='Sparse-to-Dense')
 parser.add_argument('-n',
@@ -85,17 +87,17 @@ parser.add_argument('--resume',
                     metavar='PATH',
                     help='path to latest checkpoint (default: none)')
 parser.add_argument('--data-folder',
-                    default='/data/dataset/kitti_depth/depth',
+                    default=f'{HOME_DIR}/dataset/kitti_depth/depth',
                     type=str,
                     metavar='PATH',
                     help='data folder (default: none)')
 parser.add_argument('--data-folder-rgb',
-                    default='/data/dataset/kitti_raw',
+                    default=f'{HOME_DIR}/dataset/kitti_raw',
                     type=str,
                     metavar='PATH',
                     help='data folder rgb (default: none)')
 parser.add_argument('--data-folder-save',
-                    default='/data/dataset/kitti_depth/submit_test/',
+                    default=f'{HOME_DIR}/dataset/kitti_depth/submit_test/',
                     type=str,
                     metavar='PATH',
                     help='data folder test results(default: none)')
@@ -214,7 +216,6 @@ def iterate(mode, args, loader, model, optimizer, logger, epoch):
         else:
             start = time.time()
             pred = model(batch_data)
-
         if(args.evaluate):
             gpu_time = time.time() - start
         #'''

@@ -1,0 +1,18 @@
+version: "3.8"
+services:
+  penet:
+    image: phatli/penet:cu111
+    stdin_open: true
+    tty: true
+    ports:
+      - 6006:6006
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    volumes:
+      - ".:/home/user/penet:Z"
+      - "../../dataset:/home/user/dataset"

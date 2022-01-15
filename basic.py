@@ -272,7 +272,7 @@ class GeometryFeature(nn.Module):
         super(GeometryFeature, self).__init__()
 
     def forward(self, z, vnorm, unorm, h, w, ch, cw, fh, fw):
-        x = z*(0.5*h*(vnorm+1)-ch)/fh
+        x = z*(0.5*h*(vnorm+1)-ch)/fh #ch is u0, cw is v0
         y = z*(0.5*w*(unorm+1)-cw)/fw
         return torch.cat((x, y, z),1)
 
@@ -325,5 +325,3 @@ class BasicBlockGeo(nn.Module):
         out = self.relu(out)
 
         return out
-
-
